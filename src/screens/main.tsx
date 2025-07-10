@@ -1,5 +1,5 @@
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-import { Text } from '../components/Text';
+import { Text } from '../components/text';
 
 export function Main() {
   const isAndroid = Platform.OS === 'android';

@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
-import { Main } from './src/ui/Main';
 import { StatusBar } from 'expo-status-bar';
+
+import { Main } from './src/screens/main';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({

@@ -17,7 +17,6 @@ export function Header() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
     gap: 4,
     paddingTop: 20,
   },

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  Dimensions,
   FlatList,
   Platform,
   SafeAreaView,
@@ -19,10 +18,6 @@ export function Main() {
 
   const isAndroid = Platform.OS === 'android';
   const statusBarHeight = StatusBar.currentHeight ?? 0;
-
-  const screenHeight = Dimensions.get('screen').height;
-  const windowHeight = Dimensions.get('window').height;
-  const navigationBarHeight = screenHeight - windowHeight + statusBarHeight;
 
   function handleSelectCategory(categoryId: string) {
     setSelectedCategory((prevState) =>
@@ -60,14 +55,7 @@ export function Main() {
         <View style={styles.menuList}></View>
       </SafeAreaView>
 
-      <SafeAreaView
-        style={[
-          styles.footerContainer,
-          isAndroid && navigationBarHeight
-            ? { marginBottom: navigationBarHeight }
-            : {},
-        ]}
-      >
+      <SafeAreaView style={styles.footerContainer}>
         <Footer />
       </SafeAreaView>
     </>

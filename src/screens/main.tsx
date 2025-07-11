@@ -1,5 +1,5 @@
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-import { Text } from '../components/text';
+import { Header } from '../components/header';
 
 export function Main() {
   const isAndroid = Platform.OS === 'android';
@@ -12,7 +12,7 @@ export function Main() {
         isAndroid && statusBarHeight ? { marginTop: statusBarHeight } : {},
       ]}
     >
-      <Text weight="700">Hello Native World!</Text>
+      <Header />
     </SafeAreaView>
   );
 }
@@ -20,5 +20,6 @@ export function Main() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 24,
   },
 });

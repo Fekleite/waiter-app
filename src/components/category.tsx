@@ -1,14 +1,14 @@
 import {
   Platform,
+  Pressable,
+  type PressableProps,
   StyleSheet,
-  TouchableOpacity,
-  type TouchableOpacityProps,
   View,
 } from 'react-native';
 
 import { Text } from './text';
 
-interface CategoryProps extends TouchableOpacityProps {
+interface CategoryProps extends PressableProps {
   category: {
     _id: string;
     name: string;
@@ -21,7 +21,13 @@ export function Category({ category, isActive, ...props }: CategoryProps) {
   const isAndroid = Platform.OS === 'android';
 
   return (
-    <TouchableOpacity style={styles.container} {...props}>
+    <Pressable
+      style={({ pressed }) => [
+        { opacity: pressed ? 0.5 : 1 },
+        styles.container,
+      ]}
+      {...props}
+    >
       {/* The elevation prop is not customizable so I create a view shadow */}
       {isAndroid && <View style={styles.shadow} />}
 
@@ -32,7 +38,7 @@ export function Category({ category, isActive, ...props }: CategoryProps) {
       <Text size={14} weight="600" opacity={isActive ? 1 : 0.5}>
         {category.name}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

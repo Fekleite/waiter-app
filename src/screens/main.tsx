@@ -11,7 +11,10 @@ import {
 import { Category } from '../components/category';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
+import { ProductItem } from '../components/product-item';
+import { Separator } from '../components/separator';
 import { categories } from '../mocks/categories';
+import { products } from '../mocks/products';
 
 export function Main() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -52,7 +55,14 @@ export function Main() {
           />
         </View>
 
-        <View style={styles.menuList}></View>
+        <View style={styles.menuContainer}>
+          <FlatList
+            data={products}
+            keyExtractor={(product) => product._id}
+            renderItem={({ item }) => <ProductItem product={item} />}
+            ItemSeparatorComponent={Separator}
+          />
+        </View>
       </SafeAreaView>
 
       <SafeAreaView style={styles.footerContainer}>
@@ -69,7 +79,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     backgroundColor: '#fafafa',
   },
-  menuList: {
+  menuContainer: {
     flex: 1,
   },
   footerContainer: {

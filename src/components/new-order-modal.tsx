@@ -63,7 +63,9 @@ export function NewOrderModal({
               onChangeText={handleInputChange}
             />
 
-            <Button onPress={handleSave}>Salvar</Button>
+            <Button onPress={handleSave} disabled={tableNumber.length === 0}>
+              Salvar
+            </Button>
           </View>
         </View>
       </KeyboardAvoidingView>

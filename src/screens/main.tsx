@@ -1,36 +1,20 @@
 import { useState } from 'react';
-import {
-  FlatList,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 
-import { Category } from '../components/category';
+import { CategorySlider } from '../components/categories-slider';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
+import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
-import { ProductItem } from '../components/product-item';
-import { Separator } from '../components/separator';
-import { Text } from '../components/text';
-import { categories } from '../mocks/categories';
-import { products } from '../mocks/products';
+import { SelectedTable } from '../components/selected-table';
+
+import { isAndroid } from '../utils/platform';
 
 export function Main() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
 
-  const isAndroid = Platform.OS === 'android';
   const statusBarHeight = StatusBar.currentHeight ?? 0;
-
-  function handleSelectCategory(categoryId: string) {
-    setSelectedCategory((prevState) =>
-      prevState === categoryId ? null : categoryId,
-    );
-  }
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -54,32 +38,14 @@ export function Main() {
       >
         <Header />
 
-        {selectedTable && <Text>{`Mesa ${selectedTable} selecionada`}</Text>}
+        {selectedTable && <SelectedTable table={selectedTable} />}
 
         <View>
-          <FlatList
-            data={categories}
-            keyExtractor={(category) => category._id}
-            renderItem={({ item }) => (
-              <Category
-                onPress={() => handleSelectCategory(item._id)}
-                category={item}
-                isActive={selectedCategory === item._id}
-              />
-            )}
-            contentContainerStyle={{ paddingRight: 24 }}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
+          <CategorySlider />
         </View>
 
         <View style={styles.menuContainer}>
-          <FlatList
-            data={products}
-            keyExtractor={(product) => product._id}
-            renderItem={({ item }) => <ProductItem product={item} />}
-            ItemSeparatorComponent={Separator}
-          />
+          <Menu />
         </View>
       </SafeAreaView>
 

@@ -1,10 +1,6 @@
-import {
-  Platform,
-  Pressable,
-  type PressableProps,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Pressable, type PressableProps, StyleSheet, View } from 'react-native';
+
+import { isAndroid } from '../utils/platform';
 
 import { Text } from './text';
 
@@ -18,8 +14,6 @@ interface CategoryProps extends PressableProps {
 }
 
 export function Category({ category, isActive, ...props }: CategoryProps) {
-  const isAndroid = Platform.OS === 'android';
-
   return (
     <Pressable
       style={({ pressed }) => [

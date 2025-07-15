@@ -3,13 +3,15 @@ import {
   KeyboardAvoidingView,
   Modal,
   type ModalProps,
-  Platform,
   Pressable,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
+
 import { Close } from '../assets/icons/close';
+import { isIOS } from '../utils/platform';
+
 import { Button } from './button';
 import { Text } from './text';
 
@@ -24,8 +26,6 @@ export function NewOrderModal({
   ...props
 }: NewOrderModalProps) {
   const [tableNumber, setTableNumber] = useState('');
-
-  const isIOS = Platform.OS === 'ios';
 
   function handleInputChange(value: string) {
     setTableNumber(value);

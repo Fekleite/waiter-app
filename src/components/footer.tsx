@@ -1,10 +1,14 @@
 import { StyleSheet, View } from 'react-native';
 import { Button } from './button';
 
-export function Footer() {
+interface FooterProps {
+  handleNewOrder: () => void;
+}
+
+export function Footer({ handleNewOrder }: FooterProps) {
   return (
     <View style={styles.container}>
-      <Button>Novo pedido</Button>
+      <Button onPress={handleNewOrder}>Novo pedido</Button>
     </View>
   );
 }

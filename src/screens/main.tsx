@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { CategorySlider } from '../components/categories-slider';
+import { Container } from '../components/container';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
-import { isAndroid } from '../utils/platform';
 
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
-
-  const statusBarHeight = StatusBar.currentHeight ?? 0;
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -33,12 +31,7 @@ export function Main() {
 
   return (
     <>
-      <SafeAreaView
-        style={[
-          styles.container,
-          isAndroid && statusBarHeight ? { marginTop: statusBarHeight } : {},
-        ]}
-      >
+      <Container style={styles.container} withStatusBar>
         {selectedTable ? (
           <OrderHeader
             onCancelOrder={handleCancelOrder}
@@ -52,12 +45,12 @@ export function Main() {
           <CategorySlider />
         </View>
 
-        <View style={styles.menuContainer}>
+        <View style={styles.menu}>
           <Menu />
         </View>
-      </SafeAreaView>
+      </Container>
 
-      <SafeAreaView style={styles.footerContainer}>
+      <Container style={styles.footerContainer}>
         <Footer onCreateOrder={handleOpenNewOrderModal} />
 
         <NewOrderModal
@@ -66,7 +59,7 @@ export function Main() {
           onClose={handleCloseNewOrderModal}
           onRequestClose={handleCloseNewOrderModal}
         />
-      </SafeAreaView>
+      </Container>
     </>
   );
 }
@@ -78,7 +71,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     backgroundColor: '#fafafa',
   },
-  menuContainer: {
+  menu: {
     flex: 1,
   },
   footerContainer: {

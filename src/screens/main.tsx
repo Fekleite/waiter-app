@@ -6,8 +6,7 @@ import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
-import { TextCard } from '../components/text-card';
-
+import { OrderHeader } from '../components/order-header';
 import { isAndroid } from '../utils/platform';
 
 export function Main() {
@@ -28,6 +27,10 @@ export function Main() {
     setIsNewOrderModalVisible(false);
   }
 
+  function handleCancelOrder() {
+    setSelectedTable(null);
+  }
+
   return (
     <>
       <SafeAreaView
@@ -36,9 +39,14 @@ export function Main() {
           isAndroid && statusBarHeight ? { marginTop: statusBarHeight } : {},
         ]}
       >
-        <Header />
-
-        {selectedTable && <TextCard label={`Mesa ${selectedTable}`} />}
+        {selectedTable ? (
+          <OrderHeader
+            onCancelOrder={handleCancelOrder}
+            tableNumber={selectedTable}
+          />
+        ) : (
+          <Header />
+        )}
 
         <View>
           <CategorySlider />
@@ -50,7 +58,7 @@ export function Main() {
       </SafeAreaView>
 
       <SafeAreaView style={styles.footerContainer}>
-        <Footer handleNewOrder={handleOpenNewOrderModal} />
+        <Footer onCreateOrder={handleOpenNewOrderModal} />
 
         <NewOrderModal
           visible={isNewOrderModalVisible}

@@ -33,6 +33,7 @@ export function NewOrderModal({
 
   function handleSave() {
     onSave(tableNumber);
+    setTableNumber('');
     onClose();
   }
 

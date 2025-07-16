@@ -2,13 +2,13 @@ import { StyleSheet, View } from 'react-native';
 import { Button } from './button';
 
 interface FooterProps {
-  handleNewOrder: () => void;
+  onCreateOrder: () => void;
 }
 
-export function Footer({ handleNewOrder }: FooterProps) {
+export function Footer({ onCreateOrder }: FooterProps) {
   return (
     <View style={styles.container}>
-      <Button onPress={handleNewOrder}>Novo pedido</Button>
+      <Button onPress={onCreateOrder}>Novo pedido</Button>
     </View>
   );
 }

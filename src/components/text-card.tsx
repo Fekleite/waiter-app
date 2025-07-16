@@ -2,14 +2,14 @@ import { StyleSheet, View } from 'react-native';
 
 import { Text } from './text';
 
-interface SelectedTableProps {
-  table: string;
+interface TextCardProps {
+  label: string;
 }
 
-export function SelectedTable({ table }: SelectedTableProps) {
+export function TextCard({ label }: TextCardProps) {
   return (
     <View style={styles.container}>
-      <Text size={14}>Mesa {table}</Text>
+      <Text size={14}>{label}</Text>
     </View>
   );
 }

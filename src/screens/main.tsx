@@ -6,7 +6,7 @@ import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
-import { SelectedTable } from '../components/selected-table';
+import { TextCard } from '../components/text-card';
 
 import { isAndroid } from '../utils/platform';
 
@@ -38,7 +38,7 @@ export function Main() {
       >
         <Header />
 
-        {selectedTable && <SelectedTable table={selectedTable} />}
+        {selectedTable && <TextCard label={`Mesa ${selectedTable}`} />}
 
         <View>
           <CategorySlider />

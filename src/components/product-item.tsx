@@ -1,33 +1,25 @@
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { PlusCircle } from '../assets/icons/plus-circle';
+import { defaultImageHost } from '../env';
+import type { Product } from '../types/product';
 import { formatToCurrency } from '../utils/number-format';
+
 import { Text } from './text';
 
 interface ProductItemProps {
-  product: {
-    _id: string;
-    name: string;
-    description: string;
-    imagePath: string;
-    price: number;
-    ingredients: Array<{
-      name: string;
-      icon: string;
-      _id: string;
-    }>;
-  };
+  product: Product;
+  onSeeDetails: (product: Product) => void;
 }
 
-const defaultImageHost = 'http://192.168.1.21:3333/uploads';
-
-export function ProductItem({ product }: ProductItemProps) {
+export function ProductItem({ product, onSeeDetails }: ProductItemProps) {
   return (
     <Pressable
       style={({ pressed }) => [
         styles.container,
         { opacity: pressed ? 0.8 : 1 },
       ]}
+      onPress={() => onSeeDetails(product)}
     >
       <Image
         source={{

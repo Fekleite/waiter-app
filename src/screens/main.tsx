@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { Cart } from '../components/cart';
 import { CategorySlider } from '../components/categories-slider';
 import { Container } from '../components/container';
 import { Footer } from '../components/footer';
@@ -9,9 +10,22 @@ import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
 
+import { products } from '../mocks/products';
+import type { Item } from '../types/cart';
+
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
+  const [cartItems, setCartItems] = useState<Item[]>([
+    {
+      product: products[0],
+      quantity: 2,
+    },
+    {
+      product: products[1],
+      quantity: 1,
+    },
+  ]);
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -51,7 +65,9 @@ export function Main() {
       </Container>
 
       <Container style={styles.footerContainer}>
-        <Footer onCreateOrder={handleOpenNewOrderModal} />
+        {!selectedTable && <Footer onCreateOrder={handleOpenNewOrderModal} />}
+
+        {selectedTable && <Cart items={cartItems} />}
 
         <NewOrderModal
           visible={isNewOrderModalVisible}
@@ -76,5 +92,6 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     backgroundColor: '#ffffff',
+    elevation: 2,
   },
 });

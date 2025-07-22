@@ -10,9 +10,14 @@ import { Text } from './text';
 interface ProductItemProps {
   product: Product;
   onSeeDetails: (product: Product) => void;
+  onAddToCart: (product: Product) => void;
 }
 
-export function ProductItem({ product, onSeeDetails }: ProductItemProps) {
+export function ProductItem({
+  product,
+  onSeeDetails,
+  onAddToCart,
+}: ProductItemProps) {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -40,7 +45,7 @@ export function ProductItem({ product, onSeeDetails }: ProductItemProps) {
         <Text weight="600">{formatToCurrency(product.price)}</Text>
       </View>
 
-      <Pressable style={styles.addButton}>
+      <Pressable onPress={() => onAddToCart(product)} style={styles.addButton}>
         <PlusCircle />
       </Pressable>
     </Pressable>

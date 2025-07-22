@@ -8,7 +8,11 @@ import { ProductDetailsModal } from './product-details-modal';
 import { ProductItem } from './product-item';
 import { Separator } from './separator';
 
-export function Menu() {
+interface MenuProps {
+  onAddToCart: (product: Product) => void;
+}
+
+export function Menu({ onAddToCart }: MenuProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductDetailsModalVisible, setProductDetailsModalVisible] =
     useState(false);
@@ -28,7 +32,11 @@ export function Menu() {
         data={products}
         keyExtractor={(product) => product._id}
         renderItem={({ item }) => (
-          <ProductItem product={item} onSeeDetails={handleSeeProductDetails} />
+          <ProductItem
+            product={item}
+            onSeeDetails={handleSeeProductDetails}
+            onAddToCart={onAddToCart}
+          />
         )}
         ItemSeparatorComponent={Separator}
       />
@@ -38,6 +46,7 @@ export function Menu() {
         onRequestClose={handleCloseProductDetailModal}
         onClose={handleCloseProductDetailModal}
         product={selectedProduct}
+        onAddToCart={onAddToCart}
       />
     </>
   );

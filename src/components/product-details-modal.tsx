@@ -22,15 +22,22 @@ import { TextCard } from './text-card';
 interface ProductDetailsModalProps extends ModalProps {
   product: Product | null;
   onClose: () => void;
+  onAddToCart: (product: Product) => void;
 }
 
 export function ProductDetailsModal({
   product,
   onClose,
+  onAddToCart,
   ...props
 }: ProductDetailsModalProps) {
   if (!product) {
     return null;
+  }
+
+  function handleAddToCart() {
+    onAddToCart(product!);
+    onClose();
   }
 
   return (
@@ -93,7 +100,7 @@ export function ProductDetailsModal({
               </Text>
             </View>
 
-            <Button>Adicionar ao pedido</Button>
+            <Button onPress={handleAddToCart}>Adicionar ao pedido</Button>
           </View>
         </Container>
       </View>

@@ -11,6 +11,7 @@ import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
 
 import type { Item } from '../types/cart';
+import type { Product } from '../types/product';
 
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -31,6 +32,31 @@ export function Main() {
 
   function handleCancelOrder() {
     setSelectedTable(null);
+    setCartItems([]);
+  }
+
+  function handleAddToCart(product: Product) {
+    if (!selectedTable) {
+      setIsNewOrderModalVisible(true);
+    }
+
+    setCartItems((prevItems) => {
+      const existingItemIndex = prevItems.findIndex(
+        (cartItem) => cartItem.product._id === product._id,
+      );
+
+      if (existingItemIndex < 0) {
+        return prevItems.concat({ product, quantity: 1 });
+      }
+
+      const updatedItems = [...prevItems];
+      updatedItems[existingItemIndex] = {
+        ...updatedItems[existingItemIndex],
+        quantity: updatedItems[existingItemIndex].quantity + 1,
+      };
+
+      return updatedItems;
+    });
   }
 
   return (
@@ -50,7 +76,7 @@ export function Main() {
         </View>
 
         <View style={styles.menu}>
-          <Menu />
+          <Menu onAddToCart={handleAddToCart} />
         </View>
       </Container>
 

@@ -11,6 +11,8 @@ interface CartProps {
 }
 
 export function Cart({ items }: CartProps) {
+  const isEmpty = items.length === 0;
+
   const total = useMemo(() => {
     return items.reduce(
       (total, item) => total + item.product.price * item.quantity,
@@ -25,18 +27,25 @@ export function Cart({ items }: CartProps) {
         keyExtractor={(item) => item.product._id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <CartItem item={item} />}
+        style={styles.cartList}
       />
 
       <View style={styles.footer}>
-        <View>
-          <Text color="#666666">Total</Text>
+        {!isEmpty ? (
+          <View>
+            <Text color="#666666">Total</Text>
 
-          <Text weight="600" size={18}>
-            {formatToCurrency(total)}
-          </Text>
-        </View>
+            <Text weight="600" size={18}>
+              {formatToCurrency(total)}
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.emptyCart}>
+            <Text color="#999999">Seu carrinho está vazio</Text>
+          </View>
+        )}
 
-        <Button>Confirmar pedido</Button>
+        <Button disabled={isEmpty}>Confirmar pedido</Button>
       </View>
     </View>
   );
@@ -44,14 +53,21 @@ export function Cart({ items }: CartProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
     paddingVertical: 16,
-    minHeight: 110,
+    paddingHorizontal: 24,
+    minHeight: 72,
+  },
+  cartList: {
+    maxHeight: 144,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 16,
+  },
+  emptyCart: {
+    flex: 1,
+    maxWidth: 120,
   },
 });

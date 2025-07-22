@@ -10,22 +10,12 @@ import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
 
-import { products } from '../mocks/products';
 import type { Item } from '../types/cart';
 
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
-  const [cartItems, setCartItems] = useState<Item[]>([
-    {
-      product: products[0],
-      quantity: 2,
-    },
-    {
-      product: products[1],
-      quantity: 1,
-    },
-  ]);
+  const [cartItems, setCartItems] = useState<Item[]>([]);
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);

@@ -1,16 +1,22 @@
 import { useMemo } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+
 import type { Item } from '../types/cart';
+import type { Product } from '../types/product';
+
 import { formatToCurrency } from '../utils/number-format';
+
 import { Button } from './button';
 import { CartItem } from './cart-item';
 import { Text } from './text';
 
 interface CartProps {
   items: Item[];
+  onAdd: (product: Product) => void;
+  onRemove: (product: Product) => void;
 }
 
-export function Cart({ items }: CartProps) {
+export function Cart({ items, onAdd, onRemove }: CartProps) {
   const isEmpty = items.length === 0;
 
   const total = useMemo(() => {
@@ -26,7 +32,9 @@ export function Cart({ items }: CartProps) {
         data={items}
         keyExtractor={(item) => item.product._id}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <CartItem item={item} />}
+        renderItem={({ item }) => (
+          <CartItem item={item} onAdd={onAdd} onRemove={onRemove} />
+        )}
         style={styles.cartList}
       />
 

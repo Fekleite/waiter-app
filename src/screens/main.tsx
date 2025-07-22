@@ -45,14 +45,38 @@ export function Main() {
         (cartItem) => cartItem.product._id === product._id,
       );
 
+      const existingItem = prevItems[existingItemIndex];
+      const updatedItems = [...prevItems];
+
       if (existingItemIndex < 0) {
-        return prevItems.concat({ product, quantity: 1 });
+        return updatedItems.concat({ product, quantity: 1 });
       }
 
-      const updatedItems = [...prevItems];
       updatedItems[existingItemIndex] = {
-        ...updatedItems[existingItemIndex],
-        quantity: updatedItems[existingItemIndex].quantity + 1,
+        ...existingItem,
+        quantity: existingItem.quantity + 1,
+      };
+
+      return updatedItems;
+    });
+  }
+
+  function handleRemoveFromCart(product: Product) {
+    setCartItems((prevItems) => {
+      const existingItemIndex = prevItems.findIndex(
+        (cartItem) => cartItem.product._id === product._id,
+      );
+
+      const existingItem = prevItems[existingItemIndex];
+      const updatedItems = [...prevItems];
+
+      if (existingItem.quantity === 1) {
+        return updatedItems.filter((item) => item.product._id !== product._id);
+      }
+
+      updatedItems[existingItemIndex] = {
+        ...existingItem,
+        quantity: existingItem.quantity - 1,
       };
 
       return updatedItems;
@@ -83,7 +107,13 @@ export function Main() {
       <Container style={styles.footerContainer}>
         {!selectedTable && <Footer onCreateOrder={handleOpenNewOrderModal} />}
 
-        {selectedTable && <Cart items={cartItems} />}
+        {selectedTable && (
+          <Cart
+            items={cartItems}
+            onAdd={handleAddToCart}
+            onRemove={handleRemoveFromCart}
+          />
+        )}
 
         <NewOrderModal
           visible={isNewOrderModalVisible}

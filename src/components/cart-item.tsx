@@ -4,16 +4,21 @@ import { MinusCircle } from '../assets/icons/minus-circle';
 import { PlusCircle } from '../assets/icons/plus-circle';
 
 import { defaultImageHost } from '../env';
+
 import type { Item } from '../types/cart';
+import type { Product } from '../types/product';
+
 import { formatToCurrency } from '../utils/number-format';
 
 import { Text } from './text';
 
 interface CartItemProps {
   item: Item;
+  onAdd: (product: Product) => void;
+  onRemove: (product: Product) => void;
 }
 
-export function CartItem({ item }: CartItemProps) {
+export function CartItem({ item, onAdd, onRemove }: CartItemProps) {
   return (
     <View style={styles.container}>
       <View style={styles.product}>
@@ -42,6 +47,7 @@ export function CartItem({ item }: CartItemProps) {
 
       <View style={styles.actions}>
         <Pressable
+          onPress={() => onAdd(item.product)}
           style={({ pressed }) => [
             styles.actionButton,
             { opacity: pressed ? 0.5 : 1 },
@@ -51,6 +57,7 @@ export function CartItem({ item }: CartItemProps) {
         </Pressable>
 
         <Pressable
+          onPress={() => onRemove(item.product)}
           style={({ pressed }) => [
             styles.actionButton,
             { opacity: pressed ? 0.5 : 1 },

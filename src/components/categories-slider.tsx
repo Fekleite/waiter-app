@@ -7,15 +7,17 @@ import { Category } from './category';
 
 interface CategorySliderProps {
   categories: CategoryType[];
+  onSelectCategory: (categoryId: string | null) => Promise<void>;
 }
 
-export function CategorySlider({ categories }: CategorySliderProps) {
+export function CategorySlider({ categories, onSelectCategory }: CategorySliderProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   function handleSelectCategory(category: string) {
-    setSelectedCategory((prevState) =>
-      prevState === category ? null : category,
-    );
+    const categoryId = selectedCategory === category ? null : category;
+
+    setSelectedCategory(categoryId);
+    onSelectCategory(categoryId)
   }
 
   if (categories.length === 0) {

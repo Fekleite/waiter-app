@@ -10,11 +10,12 @@ import { Loading } from '../components/loading';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
-
+import { getCategories } from '../services/categories/get-categories';
+import { getProducts } from '../services/products/get-products';
+import { getProductsByCategory } from '../services/products/get-products-by-category';
 import type { Item } from '../types/cart';
 import type { Category } from '../types/category';
 import type { Product } from '../types/product';
-import { api } from '../services/api';
 
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -24,24 +25,19 @@ export function Main() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  function getCategoriesAndProducts() {
-    Promise.all([
-      api.get<Category[]>('/categories'),
-      api.get<Product[]>('/products'),
-    ]).then(([categoriesResponse, productsResponse]) => {
-      setCategories(categoriesResponse.data);
-      setProducts(productsResponse.data);
-    }).catch((error) => {
-      // TODO: Handle error appropriately
-      console.error('Error fetching data:', error);
-    }).finally(() => {
-      setIsLoading(false);
-    })
-  }
-
   useEffect(() => {
-    getCategoriesAndProducts();
-  }, [])
+    Promise.all([getCategories(), getProducts()])
+      .then(([categoriesResponse, productsResponse]) => {
+        setCategories(categoriesResponse.data);
+        setProducts(productsResponse.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -108,6 +104,18 @@ export function Main() {
     });
   }
 
+  async function handleGetProductsByCategory(categoryId: string | null) {
+    if (categoryId) {
+      const { data } = await getProductsByCategory({ categoryId });
+
+      setProducts(data);
+    } else {
+      const { data } = await getProducts();
+
+      setProducts(data);
+    }
+  }
+
   return (
     <>
       <Container style={styles.container} withStatusBar>
@@ -125,7 +133,10 @@ export function Main() {
         ) : (
           <>
             <View>
-              <CategorySlider categories={categories} />
+              <CategorySlider
+                categories={categories}
+                onSelectCategory={handleGetProductsByCategory}
+              />
             </View>
 
             <View style={styles.menu}>

@@ -1,17 +1,25 @@
 import { useState } from 'react';
 import { FlatList } from 'react-native';
 
-import { categories } from '../mocks/categories';
+import type { Category as CategoryType } from '../types/category';
 
 import { Category } from './category';
 
-export function CategorySlider() {
+interface CategorySliderProps {
+  categories: CategoryType[];
+}
+
+export function CategorySlider({ categories }: CategorySliderProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   function handleSelectCategory(category: string) {
     setSelectedCategory((prevState) =>
       prevState === category ? null : category,
     );
+  }
+
+  if (categories.length === 0) {
+    return null;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Cart } from '../components/cart';
@@ -12,14 +12,36 @@ import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
 
 import type { Item } from '../types/cart';
+import type { Category } from '../types/category';
 import type { Product } from '../types/product';
+import { api } from '../services/api';
 
 export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
   const [cartItems, setCartItems] = useState<Item[]>([]);
-  const [products] = useState<Product[]>([]);
-  const [isLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  function getCategoriesAndProducts() {
+    Promise.all([
+      api.get<Category[]>('/categories'),
+      api.get<Product[]>('/products'),
+    ]).then(([categoriesResponse, productsResponse]) => {
+      setCategories(categoriesResponse.data);
+      setProducts(productsResponse.data);
+    }).catch((error) => {
+      // TODO: Handle error appropriately
+      console.error('Error fetching data:', error);
+    }).finally(() => {
+      setIsLoading(false);
+    })
+  }
+
+  useEffect(() => {
+    getCategoriesAndProducts();
+  }, [])
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -103,7 +125,7 @@ export function Main() {
         ) : (
           <>
             <View>
-              <CategorySlider />
+              <CategorySlider categories={categories} />
             </View>
 
             <View style={styles.menu}>

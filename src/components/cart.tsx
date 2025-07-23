@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
 import type { Item } from '../types/cart';
@@ -8,15 +8,20 @@ import { formatToCurrency } from '../utils/number-format';
 
 import { Button } from './button';
 import { CartItem } from './cart-item';
+import { ConfirmedOrderModal } from './confirmed-order-modal';
 import { Text } from './text';
 
 interface CartProps {
   items: Item[];
   onAdd: (product: Product) => void;
   onRemove: (product: Product) => void;
+  onResetOrder: () => void;
 }
 
-export function Cart({ items, onAdd, onRemove }: CartProps) {
+export function Cart({ items, onAdd, onRemove, onResetOrder }: CartProps) {
+  const [isConfirmedOrderModalVisible, setIsConfirmedOrderModalVisible] =
+    useState(false);
+
   const isEmpty = items.length === 0;
 
   const total = useMemo(() => {
@@ -25,6 +30,19 @@ export function Cart({ items, onAdd, onRemove }: CartProps) {
       0,
     );
   }, [items]);
+
+  function handleConfirmOrder() {
+    setIsConfirmedOrderModalVisible(true);
+  }
+
+  function handleFinishOrder() {
+    onResetOrder();
+    setIsConfirmedOrderModalVisible(false);
+  }
+
+  function handleCloseModal() {
+    setIsConfirmedOrderModalVisible(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -53,8 +71,16 @@ export function Cart({ items, onAdd, onRemove }: CartProps) {
           </View>
         )}
 
-        <Button disabled={isEmpty}>Confirmar pedido</Button>
+        <Button onPress={handleConfirmOrder} disabled={isEmpty}>
+          Confirmar pedido
+        </Button>
       </View>
+
+      <ConfirmedOrderModal
+        visible={isConfirmedOrderModalVisible}
+        onFinish={handleFinishOrder}
+        onRequestClose={handleCloseModal}
+      />
     </View>
   );
 }

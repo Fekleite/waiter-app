@@ -16,16 +16,20 @@ export function Text({
   size,
   opacity,
   children,
+  style,
   ...props
 }: TextProps) {
   return (
     <NativeText
-      style={{
-        fontFamily: weight ? `GeneralSans${weight}` : 'GeneralSans400',
-        color: color ?? '#333',
-        fontSize: size ?? 16,
-        opacity: opacity ?? 1,
-      }}
+      style={[
+        {
+          fontFamily: weight ? `GeneralSans${weight}` : 'GeneralSans400',
+          color: color ?? '#333',
+          fontSize: size ?? 16,
+          opacity: opacity ?? 1,
+        },
+        style,
+      ]}
       {...props}
     >
       {children}

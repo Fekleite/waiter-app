@@ -30,7 +30,7 @@ export function Main() {
     setIsNewOrderModalVisible(false);
   }
 
-  function handleCancelOrder() {
+  function handleResetOrderData() {
     setSelectedTable(null);
     setCartItems([]);
   }
@@ -88,7 +88,7 @@ export function Main() {
       <Container style={styles.container} withStatusBar>
         {selectedTable ? (
           <OrderHeader
-            onCancelOrder={handleCancelOrder}
+            onCancelOrder={handleResetOrderData}
             tableNumber={selectedTable}
           />
         ) : (
@@ -112,6 +112,7 @@ export function Main() {
             items={cartItems}
             onAdd={handleAddToCart}
             onRemove={handleRemoveFromCart}
+            onResetOrder={handleResetOrderData}
           />
         )}
 

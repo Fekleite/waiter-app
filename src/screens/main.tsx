@@ -10,6 +10,7 @@ import { Loading } from '../components/loading';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
+
 import type { Item } from '../types/cart';
 import type { Product } from '../types/product';
 
@@ -17,7 +18,8 @@ export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
   const [cartItems, setCartItems] = useState<Item[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [products] = useState<Product[]>([]);
+  const [isLoading] = useState(false);
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -105,7 +107,7 @@ export function Main() {
             </View>
 
             <View style={styles.menu}>
-              <Menu onAddToCart={handleAddToCart} />
+              <Menu products={products} onAddToCart={handleAddToCart} />
             </View>
           </>
         )}

@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { FlatList } from 'react-native';
 
-import { products } from '../mocks/products';
 import type { Product } from '../types/product';
-
+import { Empty } from './empty';
 import { ProductDetailsModal } from './product-details-modal';
 import { ProductItem } from './product-item';
 import { Separator } from './separator';
 
 interface MenuProps {
   onAddToCart: (product: Product) => void;
+  products: Product[];
 }
 
-export function Menu({ onAddToCart }: MenuProps) {
+export function Menu({ onAddToCart, products }: MenuProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductDetailsModalVisible, setProductDetailsModalVisible] =
     useState(false);
@@ -24,6 +24,10 @@ export function Menu({ onAddToCart }: MenuProps) {
 
   function handleCloseProductDetailModal() {
     setProductDetailsModalVisible(false);
+  }
+
+  if (products.length === 0) {
+    return <Empty message="Nenhum produto foi encontrado!" />;
   }
 
   return (

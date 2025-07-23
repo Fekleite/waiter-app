@@ -24,6 +24,7 @@ export function Main() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProductsLoading, setIsProductsLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([getCategories(), getProducts()])
@@ -105,6 +106,8 @@ export function Main() {
   }
 
   async function handleGetProductsByCategory(categoryId: string | null) {
+    setIsProductsLoading(true);
+
     if (categoryId) {
       const { data } = await getProductsByCategory({ categoryId });
 
@@ -114,6 +117,8 @@ export function Main() {
 
       setProducts(data);
     }
+
+    setIsProductsLoading(false);
   }
 
   return (
@@ -139,9 +144,13 @@ export function Main() {
               />
             </View>
 
-            <View style={styles.menu}>
-              <Menu products={products} onAddToCart={handleAddToCart} />
-            </View>
+            {isProductsLoading ? (
+              <Loading />
+            ) : (
+              <View style={styles.menu}>
+                <Menu products={products} onAddToCart={handleAddToCart} />
+              </View>
+            )}
           </>
         )}
       </Container>
@@ -157,7 +166,7 @@ export function Main() {
         ) : (
           <Footer
             onCreateOrder={handleOpenNewOrderModal}
-            isDataLoading={isLoading}
+            shouldDisabledButton={isLoading || isProductsLoading}
           />
         )}
 

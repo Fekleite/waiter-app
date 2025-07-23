@@ -3,12 +3,15 @@ import { Button } from './button';
 
 interface FooterProps {
   onCreateOrder: () => void;
+  isDataLoading?: boolean;
 }
 
-export function Footer({ onCreateOrder }: FooterProps) {
+export function Footer({ onCreateOrder, isDataLoading }: FooterProps) {
   return (
     <View style={styles.container}>
-      <Button onPress={onCreateOrder}>Novo pedido</Button>
+      <Button onPress={onCreateOrder} disabled={isDataLoading}>
+        Novo pedido
+      </Button>
     </View>
   );
 }

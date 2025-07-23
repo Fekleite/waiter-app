@@ -6,10 +6,10 @@ import { CategorySlider } from '../components/categories-slider';
 import { Container } from '../components/container';
 import { Footer } from '../components/footer';
 import { Header } from '../components/header';
+import { Loading } from '../components/loading';
 import { Menu } from '../components/menu';
 import { NewOrderModal } from '../components/new-order-modal';
 import { OrderHeader } from '../components/order-header';
-
 import type { Item } from '../types/cart';
 import type { Product } from '../types/product';
 
@@ -17,6 +17,7 @@ export function Main() {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [isNewOrderModalVisible, setIsNewOrderModalVisible] = useState(false);
   const [cartItems, setCartItems] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleSaveOrderTable(table: string) {
     setSelectedTable(table);
@@ -95,24 +96,33 @@ export function Main() {
           <Header />
         )}
 
-        <View>
-          <CategorySlider />
-        </View>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <View>
+              <CategorySlider />
+            </View>
 
-        <View style={styles.menu}>
-          <Menu onAddToCart={handleAddToCart} />
-        </View>
+            <View style={styles.menu}>
+              <Menu onAddToCart={handleAddToCart} />
+            </View>
+          </>
+        )}
       </Container>
 
       <Container style={styles.footerContainer}>
-        {!selectedTable && <Footer onCreateOrder={handleOpenNewOrderModal} />}
-
-        {selectedTable && (
+        {selectedTable ? (
           <Cart
             items={cartItems}
             onAdd={handleAddToCart}
             onRemove={handleRemoveFromCart}
             onResetOrder={handleResetOrderData}
+          />
+        ) : (
+          <Footer
+            onCreateOrder={handleOpenNewOrderModal}
+            isDataLoading={isLoading}
           />
         )}
 

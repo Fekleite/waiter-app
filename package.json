@@ -9,12 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "axios": "^1.11.0",
     "expo": "~53.0.17",
+    "expo-font": "~13.3.2",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.5",
-    "react-native-svg": "15.11.2",
-    "expo-font": "~13.3.2"
+    "react-native-svg": "15.11.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

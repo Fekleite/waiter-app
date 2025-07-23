@@ -159,6 +159,7 @@ export function Main() {
         {selectedTable ? (
           <Cart
             items={cartItems}
+            selectedTable={selectedTable}
             onAdd={handleAddToCart}
             onRemove={handleRemoveFromCart}
             onResetOrder={handleResetOrderData}

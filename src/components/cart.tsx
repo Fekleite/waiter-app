@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-
+import { createOrder } from '../services/orders/create-order';
 import type { Item } from '../types/cart';
 import type { Product } from '../types/product';
-
 import { formatToCurrency } from '../utils/number-format';
-
 import { Button } from './button';
 import { CartItem } from './cart-item';
 import { ConfirmedOrderModal } from './confirmed-order-modal';
@@ -13,14 +11,22 @@ import { Text } from './text';
 
 interface CartProps {
   items: Item[];
+  selectedTable: string;
   onAdd: (product: Product) => void;
   onRemove: (product: Product) => void;
   onResetOrder: () => void;
 }
 
-export function Cart({ items, onAdd, onRemove, onResetOrder }: CartProps) {
+export function Cart({
+  items,
+  onAdd,
+  onRemove,
+  onResetOrder,
+  selectedTable,
+}: CartProps) {
   const [isConfirmedOrderModalVisible, setIsConfirmedOrderModalVisible] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isEmpty = items.length === 0;
 
@@ -31,8 +37,28 @@ export function Cart({ items, onAdd, onRemove, onResetOrder }: CartProps) {
     );
   }, [items]);
 
-  function handleConfirmOrder() {
-    setIsConfirmedOrderModalVisible(true);
+  async function handleConfirmOrder() {
+    try {
+      setIsLoading(true);
+
+      const payload = {
+        table: selectedTable,
+        products: items.map((item) => ({
+          product: item.product._id,
+          quantity: item.quantity,
+        })),
+      };
+
+      await createOrder({
+        body: payload,
+      });
+
+      setIsConfirmedOrderModalVisible(true);
+    } catch (error) {
+      console.error('Error confirming order:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function handleFinishOrder() {
@@ -71,7 +97,11 @@ export function Cart({ items, onAdd, onRemove, onResetOrder }: CartProps) {
           </View>
         )}
 
-        <Button onPress={handleConfirmOrder} disabled={isEmpty}>
+        <Button
+          onPress={handleConfirmOrder}
+          disabled={isEmpty}
+          loading={isLoading}
+        >
           Confirmar pedido
         </Button>
       </View>
